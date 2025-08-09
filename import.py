@@ -65,7 +65,6 @@ print('New data with Q3 shape:', data_q3.shape)    # (514, 700, 26)
 
 # Decode amino acid sequences and secondary structures from one-hot encoded data
 
-import numpy as np
 
 aa_order = ['A', 'C', 'E', 'D', 'G', 'F', 'I', 'H', 'K', 'M', 'L',
             'N', 'Q', 'P', 'S', 'R', 'T', 'W', 'V', 'Y', 'X', 'NoSeq']

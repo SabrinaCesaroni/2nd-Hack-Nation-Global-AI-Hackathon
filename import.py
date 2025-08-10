@@ -140,7 +140,7 @@ def onehot_to_string_with_padding(onehot_array, order, noseq_index, pad_char):
 
 # Example usage:
 seq_strings = onehot_to_string_with_padding(data_q3[:, :, 0:22], aa_order, noseq_index=21, pad_char='X')
-ss_strings = onehot_to_string_with_padding(data_q3[:, :, 22:26], ss_order, noseq_index=3, pad_char='C')
+ss_strings = onehot_to_string_with_padding(data_q3[:, :, 22:26], ss_order, noseq_index=3, pad_char='-')
 
 # Print a few examples:
 for i in range(5):

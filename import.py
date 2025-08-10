@@ -122,27 +122,31 @@ print('New data with Q3 shape:', data_q3.shape)    # (514, 700, 26)
 
 aa_order = ['A', 'C', 'E', 'D', 'G', 'F', 'I', 'H', 'K', 'M', 'L',
             'N', 'Q', 'P', 'S', 'R', 'T', 'W', 'V', 'Y', 'X', 'NoSeq']
-
 ss_order = ['H', 'E', 'C', 'NoSeq']
 
-inputs = data_q3[:, :, 0:22]
-labels = data_q3[:, :, 22:26]
-
-def onehot_to_string_full(onehot_array, order):
+def onehot_to_string_with_padding(onehot_array, order, noseq_index, pad_char):
     indices = np.argmax(onehot_array, axis=2)
     N, L = indices.shape
     strings = []
     for i in range(N):
-        seq = ''.join(order[idx] for idx in indices[i])
-        strings.append(seq)
+        seq_chars = []
+        for idx in indices[i]:
+            if idx == noseq_index:
+                seq_chars.append(pad_char)  # Replace NoSeq by pad_char
+            else:
+                seq_chars.append(order[idx])
+        strings.append(''.join(seq_chars))
     return strings
 
-seq_strings = onehot_to_string_full(inputs, aa_order)
-ss_strings = onehot_to_string_full(labels, ss_order)
+# Example usage:
+seq_strings = onehot_to_string_with_padding(data_q3[:, :, 0:22], aa_order, noseq_index=21, pad_char='X')
+ss_strings = onehot_to_string_with_padding(data_q3[:, :, 22:26], ss_order, noseq_index=3, pad_char='C')
 
+# Print a few examples:
 for i in range(5):
     print(f"Sequence {i+1} (length 700):\n{seq_strings[i]}\n")
     print(f"Secondary Structure {i+1} (length 700):\n{ss_strings[i]}\n")
+
     
 print ("sequence length:", len(seq_strings))
 print("label length:", len(ss_strings))
@@ -183,3 +187,10 @@ print("label length:", len(ss_strings))
 # print(f'Training samples: {len(train_inputs)}')
 # print(f'Validation samples: {len(val_inputs)}')
 # print(f'Test samples: {len(test_inputs)}')
+
+# print("data_q3:",data_q3)
+# # Check the last dimension indices for first protein, first few residues
+# print(np.argmax(data_q3[0, :10, :], axis=1))
+
+# # Check the last dimension indices for last residues (likely padded)
+# print(np.argmax(data_q3[0, -20:, :], axis=1))
